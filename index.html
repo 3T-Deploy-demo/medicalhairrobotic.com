@@ -22,8 +22,60 @@
   <link rel="stylesheet" href="assets/mobirise3-blocks-plugin/css/style.css">
   <link rel="stylesheet" href="assets/mobirise-gallery/style.css">
   <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+
+<script>
+ function timestamp() { var response = document.getElementById("g-recaptcha-response"); if (response == null || response.value.trim() == "") {var elems = JSON.parse(document.getElementsByName("captcha_settings")[0].value);elems["ts"] = JSON.stringify(new Date().getTime());document.getElementsByName("captcha_settings")[0].value = JSON.stringify(elems); } } setInterval(timestamp, 500); 
+</script>
   
+<script>
+
+    function getParam(p) {
+      var match = RegExp('[?&]' + p + '=([^&]*)').exec(window.location.search);
+      return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
   
+    function getExpiryRecord(value) {
+      var expiryPeriod = 90 * 24 * 60 * 60 * 1000; // caducidad de 90 días, en milisegundos
+  
+      var expiryDate = new Date().getTime() + expiryPeriod;
+      return {
+        value: value,
+        expiryDate: expiryDate
+      };
+    }
+  
+    function addGclid() {
+      var gclidParam = getParam('gclid');
+      var gclidFormFields = ['00N0V0000098SiG']; // aquí se especifican todas las formas posibles de ID de campo de formulario
+      var gclidRecord = null;
+      var currGclidFormField;
+  
+      var gclsrcParam = getParam('gclsrc');
+      var isGclsrcValid = !gclsrcParam || gclsrcParam.indexOf('aw') !== -1;
+  
+      gclidFormFields.forEach(function (field) {
+        if (document.getElementById(field)) {
+          currGclidFormField = document.getElementById(field);
+        }
+      });
+  
+      if (gclidParam && isGclsrcValid) {
+        gclidRecord = getExpiryRecord(gclidParam);
+        localStorage.setItem('gclid', JSON.stringify(gclidRecord));
+      }
+  
+      var gclid = gclidRecord || JSON.parse(localStorage.getItem('gclid'));
+      var isGclidValid = gclid && new Date().getTime() < gclid.expiryDate;
+  
+      if (currGclidFormField && isGclidValid) {
+        currGclidFormField.value = gclid.value;
+      }
+    }
+  
+    window.addEventListener('load', addGclid);
+  
+</script>
   
 </head>
 <body>
@@ -92,36 +144,36 @@
                             </div>
                             <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
 
-<input type=hidden name="oid" value="00Dd0000000bbpz">
-<input type=hidden name="retURL" value="http://www.medicalhairrobotic.com/gracias.html">
-<input type=hidden id="00Nd0000008EspC" name="00Nd0000008EspC" title="Tipo de Origen Web"  value="Robotic">
-<input type=hidden id="00Nd0000008EspH" name="00Nd0000008EspH" type="checkbox" value="1">
-<input type=hidden id="00Nd0000008Esp2" name="00Nd0000008Esp2" title="¿Cómo nos conoció?" value="Web">
-<input type=hidden name="Creado_Por_Formulario__c" value="1">
-<input type=hidden name="country" value="Argentina">
+                                <input type=hidden name='captcha_settings' value='{"keyname":"medicalhairrobotic_com","fallback":"true","orgId":"00Dd0000000bbpz","ts":""}'>
+                                <input type=hidden name="oid" value="00Dd0000000bbpz">
+                                <input type=hidden name="retURL" value="https://www.medicalhairrobotic.com/gracias.html">
+                                <input type=hidden name="country" value="Argentina">
+                                <input type=hidden id="00Nd0000008EspC" name="00Nd0000008EspC" title="Tipo de Origen Web" value="Robotic" >
+                                <input type=hidden id="00Nd0000008Esp2" name="00Nd0000008Esp2" title="¿Cómo nos conoció?" value="Web" >
+                                <input type=hidden id="00N0V0000098SiG" name="00N0V0000098SiG" type="text" >
 
-<!--  ----------------------------------------------------------------------  -->
-<!--  Lista de Campos Visibles en el formulario.                              -->
-<!--  ----------------------------------------------------------------------  -->
+                            <!--  ----------------------------------------------------------------------  -->
+                            <!--  Lista de Campos Visibles en el formulario.                              -->
+                            <!--  ----------------------------------------------------------------------  -->
 
-<div class="col-xs-12"><input  class="form-control" placeholder="Nombre" id="first_name" maxlength="40" name="first_name" size="20" type="text" required/></div>
+                            <div class="col-xs-12"><input  class="form-control" placeholder="Nombre" id="first_name" maxlength="40" name="first_name" size="20" type="text" required/></div>
 
-<div class="col-xs-12"><input  class="form-control" placeholder="Apellido" id="last_name" maxlength="80" name="last_name" size="20" type="text" /></div>
+                            <div class="col-xs-12"><input  class="form-control" placeholder="Apellido" id="last_name" maxlength="80" name="last_name" size="20" type="text" /></div>
 
-<div class="col-xs-12"><input  class="form-control" id="email" maxlength="80" name="email" placeholder="E-mail" size="20" type="email" /></div>
+                            <div class="col-xs-12"><input  class="form-control" id="email" maxlength="80" name="email" placeholder="E-mail" size="20" type="email" /></div>
 
-<div class="col-xs-12"><input  class="form-control" id="phone" placeholder="Teléfono" maxlength="40" name="phone" size="20" type="text" required/></div>
+                            <div class="col-xs-12"><input  class="form-control" id="phone" placeholder="Teléfono" maxlength="40" name="phone" size="20" type="text" required/></div>
 
-<div class="col-xs-12"><textarea placeholder="Mensaje" class="form-control" id="00Nd00000045x6i" name="00Nd00000045x6i" rows="3" type="text" wrap="soft"></textarea></div>
+                            <textarea  id="00Nd00000045x6i" name="00Nd00000045x6i" rows="3" type="text" wrap="soft"></textarea><br>
+                            <!--  ----------------------------------------------------------------------  -->
+                            <!--  Botón "Submit" debe estar visible en el formulario                      -->
+                            <!--  ----------------------------------------------------------------------  -->
+                            <div class="g-recaptcha" data-sitekey="6Le9V6YgAAAAAKWir2bbv8Nof4q9LC3qQwhKvqYi"></div><br>
 
-<!--  ----------------------------------------------------------------------  -->
-<!--  Botón "Submit" debe estar visible en el formulario                      -->
-<!--  ----------------------------------------------------------------------  -->
+                            <div class="col-xs-12"><button class="btn btn-info" type="submit" value="" name="submit" style="display:block; margin:10px auto 10px auto;"><span class="btn-text">PONETE EN CONTACTO</span></button></div>
 
-
-<div class="col-xs-12"><button class="btn btn-info" type="submit" value="" name="submit" style="display:block; margin:10px auto 10px auto;"><span class="btn-text">PONETE EN CONTACTO</span></button></div>
-
-</form>
+                        </form>
+    
                         </div>
 
                     </div>
